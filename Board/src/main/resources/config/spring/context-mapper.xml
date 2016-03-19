@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+<typeAliases>
+<!-- <typeAlias type="com.mainticket.hello.domain.HelloVO" alias="HelloVO"/>
+<typeAlias type="com.mainticket.hello.domain.MemberVO" alias="MemberVO"/>
+<typeAlias type="com.mainticket.hello.domain.CourseVO" alias="courseVO"/>
+<typeAlias type="com.mainticket.system.domain.SystemVO" alias="systemVO"/>
+<typeAlias type="com.mainticket.system.domain.FirstMenuVO" alias="firstMenuVO"/>
+<typeAlias type="com.mainticket.system.domain.SecondMenuVO" alias="secondMenuVO"/>
+<typeAlias type="com.mainticket.system.domain.ThirdMenuVO" alias="thirdMenuVO"/> -->
+
+<typeAlias type="egovframework.rte.psl.dataaccess.util.EgovMap" alias="egovMap"/>
+
+</typeAliases>
+</configuration>
+

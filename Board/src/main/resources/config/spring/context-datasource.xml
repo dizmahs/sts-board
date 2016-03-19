@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+    					http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/jdbc  http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd">
+
+	<context:property-placeholder location="classpath:app.properties" />
+
+	<!-- DB SETTING -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" > <!-- destroy-method="close" -->
+		<property name="driverClassName" value="${datasource.log4j.driver}"/>
+        <property name="url" value="${datasource.log4j.url}"/>
+        <property name="username" value="${datasource.username}"/>
+        <property name="password" value="${datasource.password}"/>
+	</bean>
+	
+	<!-- SqlSession setup for MyBatis Database Layer  EgovAbstractMapper 상속받아 사용시 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath:${mybatis.query.mapperLoc}" />
+		<property name="configLocation" value="classpath:${mybatis.query.configLoc}"></property>
+	</bean>
+	
+	<!-- mybatis setting  AbstractDAO 상속받아 구현할때 사용-->
+	<!-- <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	  <property name="dataSource" ref="dataSource" />
+	  <property name="configLocation" value="classpath:${mybatis.query.configLoc}"></property>
+	  <property name="mapperLocations" value="classpath:${mybatis.query.mapperLoc}"></property>
+	</bean> -->
+	
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+	  <constructor-arg index="0" ref="sqlSession" />
+	</bean>
+	
+	<!--transaction setting -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	  <property name="dataSource" ref="dataSource" />
+	</bean>
+
+</beans>
