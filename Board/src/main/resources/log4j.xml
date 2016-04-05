@@ -10,9 +10,17 @@
 		</layout>
 	</appender>
 	
+	<!-- 콘솔 로그 -->  
+    <appender name="stdout" class="org.apache.log4j.ConsoleAppender">  
+        <!-- 패턴 레이아웃 설정.. -->  
+        <layout class="org.apache.log4j.PatternLayout">  
+            <param name="ConversionPattern" value="%t%gt; [%d{yyyy-MM-dd HH:mm:ss}] [%c{1}] [%L] [%p] %m %n"/>  
+        </layout>  
+    </appender>
+	
 	<!-- Application Loggers -->
 	<logger name="com.project.board">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 	
 	<!-- 3rdparty Loggers -->
@@ -34,8 +42,13 @@
 
 	<!-- Root Logger -->
 	<root>
-		<priority value="warn" />
-		<appender-ref ref="console" />
+		<!-- 
+			<priority value="info" />
+			<appender-ref ref="console" />
+		-->
+		<priority value="debug" />
+		<appender-ref ref="stdout" />
+		
 	</root>
 	
 </log4j:configuration>

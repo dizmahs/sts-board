@@ -1,9 +1,12 @@
 package com.project.board.service;
 
 import java.util.List;
-import java.util.Map;
+
+import com.project.board.domain.UserVO;
 
 public interface BoardService {
 
 	public List selectBoard() throws Exception;
+	
+	public UserVO signIn( UserVO user ) throws Exception;
 }

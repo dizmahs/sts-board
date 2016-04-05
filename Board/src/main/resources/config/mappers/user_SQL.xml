@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+
+<!-- upsert -->
+<update id="upsertUser" parameterType="hashmap">
+	INSERT INTO 
+	User ( CreatedOn, id, password, name, email) 
+    VALUES ( now(), #{id}, #{password}, #{name}, #{email} )
+	ON DUPLICATE KEY 
+	UPDATE UpdatedBy = Now()
+	<choose>
+		<when test="queryType.equals('chagePassword')">
+			, Password = #{password}
+		</when>
+		<otherwise>
+			, name=#{name}, email=#{email}
+		</otherwise>
+	</choose>
+</update>
+
+<!-- signIn -->
+<select id="signIn" resultType="userVO" parameterType="hashmap">
+		Select
+			CreatedOn
+			, UpdatedBy
+			, ID
+			, Password
+			, Name
+			, Email	
+		From User
+		Where 1=1
+			And ID = #{id}
+			And Password = #{password}				
+		Order by CreatedOn desc
+</select>
+
+<!-- getList -->
+<select id="getList" resultType="egovMap" parameterType="hashmap">
+	Select 
+		CreatedOn
+		, UpdatedBy
+		, ID
+		, Name
+		, Email 
+	From  User
+	Order by CreatedOn desc
+	<if test="queryType.equals('paging')">
+		limit #{startIndex}, #{pageSize}
+	</if>	
+</select>
+
+<!-- getUser -->
+<select id="getUser" resultType="egovMap" parameterType="hashmap">
+	Select
+	<choose>
+		<when test="queryType.equals('count')">
+			count(*) AS "totalCount"
+		</when>
+		<otherwise>
+			CreatedOn
+			, UpdatedBy
+			, ID
+			, Name
+			, Email 
+		</otherwise>
+	</choose>
+	From User
+	Where 1=1
+	<choose>
+		<when test="queryType2.equals('like')">
+			And upper(Name) like '%' || upper(#{name}) || '%'
+		</when>
+		<otherwise>
+			And Name = #{name}
+		</otherwise>
+	</choose>		
+	Order by CreatedOn desc	
+</select>
+
+
+
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <!-- <PatternLayout pattern="%d %5p [%c] %m%n" /> -->
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </Console>
+        <File name="file" fileName="D:/logfile/default/logfile.log" append="false">
+        <!-- <PatternLayout pattern="%d %5p [%c] %m%n"/> -->
+           <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+       </File>
+       
+    </Appenders>
+    <Loggers>
+        <Logger name="org.springframework" level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="file" />
+        </Logger>
+        <Logger name="org.springframework.jdbc" level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="file" />
+        </Logger>
+         <Logger name="egovframework" level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        
+        <!-- log SQL with timing information, post execution -->
+        <!-- <Logger name="java.sql" level="INFO" additivity="false">
+          <AppenderRef ref="console" />
+          <AppenderRef ref="file" />
+        </Logger> -->
+        
+        <Logger name="jdbc.sqlonly" level="OFF" additivity="false"> <!-- INFO -->
+            <AppenderRef ref="console" />
+            <AppenderRef ref="file" />
+        </Logger>
+        <Logger name="jdbc.sqltiming" level="DEBUG" additivity="false"> <!-- ERROR -->  
+            <AppenderRef ref="console" />
+            <AppenderRef ref="file" />
+        </Logger>
+        <Logger name="jdbc.audit" level="ERROR" additivity="false"> 
+            <AppenderRef ref="console" />
+            <AppenderRef ref="file" />
+        </Logger>
+        <Logger name="jdbc.resultset" level="ERROR" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="file" />
+        </Logger>
+       
+       <!-- 배포시 ERROR로  -->
+        <Root level="DEBUG">
+            <AppenderRef ref="console" />
+           <!-- <AppenderRef ref="file" /> -->
+        </Root>
+    </Loggers>
+</Configuration>

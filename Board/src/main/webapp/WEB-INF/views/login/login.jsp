@@ -10,12 +10,23 @@
 </head>
 <body>
     <div class="container">
-      <form class="form-signin">
+																				
+      <form class="form-signin" method=POST name='LoginForm' action="./login">
         <h2 class="form-signin-heading">Please sign in</h2>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        
+        <label for="txtID" class="sr-only">id</label>
+        <input class="form-control"
+         	id="txtID" name="id"
+        	placeholder="id" 
+        	value="${user.email}"
+        	required autofocus />
+        	
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <input class="form-control" 
+        	type="password" 
+        	id="txtPassword"
+        	name="password" 
+        	placeholder="Password" required />
         <div class="checkbox">
           <label>
             <input type="checkbox" value="remember-me"> Remember me
@@ -25,7 +36,13 @@
       </form>
 
     </div> <!-- /container -->
+    ${signInUser} | ${test}
+    
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
   </body>
 </html>
+
+<script type="text/javascript">
+	
+</script>
