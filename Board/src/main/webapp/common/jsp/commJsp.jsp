@@ -8,6 +8,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>   
 <%-- <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%> --%>   
 
+<!-- # scripts -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/common/js/bongComm.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/common/js/comm.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/common/js/jquery-1.9.1.js"></script>
@@ -16,9 +17,15 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/common/js/bootstrap.min.js"></script>
 <%-- <script type="text/javascript" src="${pageContext.request.contextPath}/common/js/npm.js"></script> --%>
 
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+<!-- # /scripts  -->
+
+<!-- # css -->
 <link href="${pageContext.request.contextPath}/common/css/bootstrap.min.css" rel="stylesheet">
 
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<!-- # /css -->
+
 
 <script type="text/javascript">
 	<!--
@@ -71,5 +78,7 @@
 	
 	// 현재 날짜
 	//final String current_date = StringUtil.getCurrentDate();
+	
+	pageContext.setAttribute("LF", "\n");
 %>
 

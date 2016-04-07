@@ -8,5 +8,4 @@ public interface BoardService {
 
 	public List selectBoard() throws Exception;
 	
-	public UserVO signIn( UserVO user ) throws Exception;
 }

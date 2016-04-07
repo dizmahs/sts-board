@@ -2,6 +2,8 @@ package com.project.board.domain;
 
 import java.util.Date;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
 public abstract class BaseVO {
 	public Date createdOn;
 	public Date updatedOn;
@@ -23,7 +25,7 @@ public abstract class BaseVO {
 	public Date getUpdatedOn() {
 		return updatedOn;
 	}
-
+	
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
 	}
@@ -66,5 +68,20 @@ public abstract class BaseVO {
 	public void setPage( int page ){
 		this.startIndex = ( 1 - page ) * pageSize;		
 	}
+
+	@Override
+	public String toString() {
+		String jsonString = "";
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			jsonString = mapper.writeValueAsString(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return super.toString();
+		}
+		return jsonString;
+	}
+	
+	
 
 }

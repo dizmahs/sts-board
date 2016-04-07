@@ -8,46 +8,61 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.project.board.domain.UserVO;
-import com.project.board.service.BoardService;
+import com.project.board.service.UserService;
 
 @Controller
 public class LoginController {
 
-	@Resource(name="boardService")
-	private BoardService boardService;
-	
-	@Resource(name="messageSource")
-    private MessageSource messageSource;
-	
+	@Resource(name = "userService")
+	private UserService userService;
+
+	@Resource(name = "messageSource")
+	private MessageSource messageSource;
+
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 	
-	@RequestMapping("/login")
-	public String boardList(HttpServletRequest req, HttpServletResponse resp, ModelMap model) throws Exception{
-		System.out.println( req.getMethod()+"] login..." );
-		
-		UserVO login = new UserVO();
-		login.setId( req.getParameter("id") );
-		login.setPassword( req.getParameter("password") );
-		
-		logger.debug( "id=" + login.getId() + ", pw=" + login.getPassword() );
 
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public ModelAndView displayLogin(HttpServletRequest request, HttpServletResponse response) {
+		logger.info( "HttpGet] displayLogin..." );
 		
-		model.addAttribute("user", boardService.signIn(login));
-		
-		
-		
-		return "login/login";
+		ModelAndView model = new ModelAndView("login/login");
+		UserVO loginBean = new UserVO();
+		model.addObject("loginBean", loginBean);
+		return model;
 	}
-	
-	@RequestMapping("/login2")
-	public String boardList2(HttpServletRequest req, HttpServletResponse resp, ModelMap model) throws Exception{
+
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public ModelAndView executeLogin(HttpServletRequest request, HttpServletResponse response,
+									 @ModelAttribute("loginBean") UserVO loginBean ) {
+		logger.info( "HttpPost] executeLogin..." );
+		logger.debug( "data=" + loginBean );
 		
-		return "login/login2";
+		ModelAndView model = null;
+		try {
+			boolean isValidUser = userService.isValidUser(loginBean);
+			if (isValidUser) {
+				logger.debug("User Login Successful");				
+				request.setAttribute("loggedInUser", loginBean.getName() );
+				model = new ModelAndView("home");
+			} else {
+				model = new ModelAndView("login/login");
+				model.addObject("loginBean", loginBean);
+				request.setAttribute("message", "Invalid credentials!!");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
 	}
-	
-	// @RequestMapping( value="/login", method=RequestMethod.POST )
+
+
 }

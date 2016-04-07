@@ -1,11 +1,14 @@
 package com.project.board.domain;
 
 public class UserVO extends BaseVO {
+
+	private static final long serialVersionUID = -5468189251678781165L;
+
 	public String userID;
 	public String id;
 	public String password;
 	public String name;
-	public String email;	
+	public String email;
 
 	public String getUserID() {
 		return userID;
@@ -46,5 +49,4 @@ public class UserVO extends BaseVO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 }
