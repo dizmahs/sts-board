@@ -4,7 +4,7 @@ import com.project.board.domain.UserVO;
 
 public interface UserService {
 
-	public boolean isValidUser(String username, String password) throws Exception;
+	public UserVO login(String username, String password) throws Exception;
 	
-	public boolean isValidUser(UserVO user) throws Exception;	
+	public UserVO login(UserVO user) throws Exception;	
 }

@@ -19,16 +19,16 @@ public class UserServiceImpl implements UserService {
 	private static Log log = LogFactory.getLog(UserServiceImpl.class);
 
 	@Override
-	public boolean isValidUser(String id, String password) throws Exception {
+	public UserVO login(String id, String password) throws Exception {
 		UserVO user = new UserVO();
 		user.setId(id);
 		user.setPassword(password);
-		return isValidUser(user);
+		return login(user);
 	}
 
 	@Override
-	public boolean isValidUser(UserVO user) throws Exception {
-		return userDao.signIn(user) != null ? true : false;
+	public UserVO login(UserVO user) throws Exception {
+		return userDao.signIn(user);
 	}
 	
 }

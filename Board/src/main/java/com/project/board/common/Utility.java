@@ -3,6 +3,8 @@ package com.project.board.common;
 
 import javax.servlet.http.*;
 
+import org.springframework.web.servlet.HandlerMapping;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -3866,6 +3868,12 @@ public class Utility {
        }
        return ret;
 
+	}
+  	
+  	public static String targetUrl(HttpServletRequest request) {
+		String restOfTheUrl = (String) request.getAttribute(
+		        HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+		return restOfTheUrl;
 	}
   	
 }
