@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ include file="/common/jsp/commJsp.jsp"%>
 	
 <!-- BEGIN Title -->	
 <div class="row">
@@ -26,7 +27,8 @@
 				<thead>
 					<tr>
 						<th data-field="boardID">&nbsp;&nbsp;</th>
-						<th data-field="title" data-align="center" >제 목</th>
+						<th data-field="title" data-align="center" 
+							data-formatter="articleLinkFormatter" >제 목</th>
 						<th data-field="userID" data-align="center" >작성자</th>
 						<th data-field="createdOn" data-align="center" >작성일</th>
 						<th data-field="hitCount" data-align="center" >조회수</th>
@@ -93,26 +95,20 @@
 
     function responseHandler(res) {
     	console.log( res );
-        /* if (res.Result != '0') {
+        if (res.result != '0') {
             alert(res.Message);
         }
-        return res.Data; */
-        return res;
+        return res.data;
     }
-	
-	function randomData() {
-        var startId = ~~(Math.random() * 100),
-            rows = [];
-        for (var i = 0; i < 10; i++) {
-            rows.push({
-            	boardID: startId + i,
-            	title: 'test' + (startId + i),
-            	userID: 'id' + (startId + i)
-            });
-        }
-        return rows;
+    
+    /*
+    * value: the field value. 
+    * row: the row record data.
+    * index: the row index.
+    */
+    function articleLinkFormatter( value, row, index ){
+    	return '<a href="/bbs/board/'+row.boardID+'.html">' + value + '</a>';
     }
-	
 	
 
 </script>

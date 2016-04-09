@@ -58,6 +58,8 @@ public class LoginController {
 				}
 				//return "forward:" + redirectUrl;
 				return "redirect:" + redirectUrl;
+				//return "redirect:/index.html";
+				
 			} else {
 				logger.debug("User Login Invalid credentials!!");
 				//sessionData.setMessage("Invalid credentials!!");

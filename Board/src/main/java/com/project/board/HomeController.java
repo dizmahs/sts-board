@@ -1,8 +1,12 @@
 package com.project.board;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -24,65 +28,83 @@ import com.project.board.domain.SessionVO;
  */
 @Controller
 public class HomeController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	
+
 	@Autowired
 	private SessionVO sessionData;
-	
-	
+
+	private String extractNameInUrl( String path ){
+		String name = "";
+		if( StringUtils.hasText(path)){
+			int divLastIndex = path.lastIndexOf("/");
+			int length = path.length();
+			if( divLastIndex != -1 && length > ( divLastIndex + 1 ) ){
+				name = path.substring(divLastIndex + 1, length );
+				int extPath = name.lastIndexOf(".");
+				if( extPath != -1 ){
+					name = name.substring(0, extPath);
+				}
+			}
+		}
+		return name;
+	}
+
 	@RequestMapping(value = "/index.html", method = RequestMethod.GET)
-	public String index(Locale locale, Model model, HttpServletRequest request) {
-		logger.info( request.getMethod() + "] index...");
+	public String index(HttpServletRequest req, Locale locale) {
+		logger.info(req.getMethod() + "] index...");
 		logger.debug("Welcome home! The client locale is {}.", locale);
-		
+
 		return "index";
 	}
-	
-	@RequestMapping( "/bbs/**/*.html")
-	public String main(Locale locale, Model model, HttpServletRequest request) {
-		
-		logger.info( request.getMethod() + "] main...");
-		
-		HttpSession session = request.getSession(true);
-		sessionData.setTargetUrl( Utility.targetUrl(request) );
+
+	@RequestMapping("/bbs/**/*.html")
+	public String main(HttpServletRequest req, Locale locale, Model model) {
+
+		logger.info(req.getMethod() + "] main...");
+
+		HttpSession session = req.getSession(true);
+		sessionData.setTargetUrl(Utility.targetUrl(req));
 		String targetUrl = sessionData.getTargetUrl();
-		
+
 		session.setAttribute("sessionInfo", sessionData);
-		
-		logger.debug("targetUrl : {}", targetUrl);	
-		
+
+		logger.debug("targetUrl : {}", targetUrl);
+
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
+
 		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
-		
+
+		model.addAttribute("serverTime", formattedDate);
+
 		return "home/main";
 	}
 	
-	@RequestMapping( "/bbs/content.html")
-	public String mainContent(Locale locale, Model model, HttpServletRequest request){
-		logger.info( request.getMethod() + "] mainContent...");
-		
-		String targetUrl = sessionData.getTargetUrl(); 
+	
+
+	@RequestMapping("/bbs/content.html")
+	public String mainContent(HttpServletRequest req, Model model) {
+		logger.info(req.getMethod() + "] mainContent...");
+
+		String targetUrl = sessionData.getTargetUrl();
 		logger.debug("targetUrl : {}", targetUrl);
-		
+
 		if (targetUrl.indexOf("/join/login") > -1) {
 			return "forward:/join/login.html";
-		}
-		else if (targetUrl.indexOf("/join/logout") > -1) {
+		} else if (targetUrl.indexOf("/join/logout") > -1) {
 			return "forward:/join/logout.html";
-		}
-		else if (targetUrl.indexOf("board/index") > -1) {
+		} else if (targetUrl.indexOf("board/index") > -1) {
 			return "forward:/board/boardContent.html";
+		} else if (targetUrl.indexOf("board/") > -1) {
+			String articleId = extractNameInUrl(targetUrl);
+			logger.debug("articleId=" + articleId );
+			return "forward:/board/"+articleId+".html";
 		}
-		
-		
+
 		logger.debug("Are you request index? ");
-		
+
 		return "forward:/index.html";
 	}
-	
+
 }
