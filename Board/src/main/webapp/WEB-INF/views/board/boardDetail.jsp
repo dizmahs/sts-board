@@ -7,7 +7,7 @@
 	<div class="col-lg-12">
 		
 			<article id="node-445302" class="node node-article left-sidebar">
-				<header class="article-header">
+				<header class="article-header" id="divHeader">
 					<!-- 기사 제목 -->
 					<h1 class="page-header">
 						<c:if test="${not empty article}">
@@ -17,7 +17,7 @@
 	
 					<!-- 작성자, 작성일, 수정일 -->
 					<c:if test="${not empty article}">
-						<div class="byline">
+						<div class="byline" id="divByLine">
 						By 
 						<span class="author">
 							<a href="#" class="author-name">${article.userID}</a>
@@ -90,84 +90,84 @@
 </div>
 <!-- END Content -->
 
+
+<c:if test="${not empty article}">
+	<c:set var="articleId" value="${article.boardID}"/>
+</c:if>
+
 <!-- BEGIN Script -->
 <script>
-	var $searchForm = $('#searchForm');
-	var $tbListTable = $('#tbListTable');
-
+	var $articleId = '${articleId}';
+	
+	var $divHeader = $( '#divHeader' );
+	
 	$(document).ready(function() {
-		//$tbListTable.bootstrapTable('load', randomData() );
-
-		var options = $tbListTable.bootstrapTable('getOptions');
-		options.pageNumber = 1;
-		if (options.url) {
-			$tbListTable.bootstrapTable('refresh');
-		} else {
-			var sURL = '/ajax/boards';
-			console.log('request url=' + sURL);
-			$tbListTable.bootstrapTable('refreshOptions', {
-				//showExport: true,
-				url : sURL
-			});
-			console.log('refreshOptions =' + sURL);
-		}
+		
+		var url = '/ajax/boards/' + $articleId
+		jQuery.get( url, function( data ){			
+			console.log( data );
+			if( data.result == '1' ){
+				alert( data.message );
+				return;
+			}
+			
+			binddingViewData( data.data );
+			
+			
+			
+			
+			//$divHeader
+			
+			
+		} );
 
 	}); // init jquery
-
-	function queryParams() {
-		var params = {};
-
-		var options = $tbListTable.bootstrapTable('getOptions');
-		if ($searchForm)
-			$searchForm
-					.find('input[name]')
-					.each(
-							function() {
-								var v = $(this).val();
-								var name = $(this).attr('name');
-								params[name] = (name.indexOf('Date') != -1) ? convertUSDateToNomalDate(v)
-										: v;
-
-								$searchForm.find('select[name]').each(
-										function() {
-											params[$(this).attr('name')] = $(
-													this).val();
-										});
-							});
-
-		var pageNo = 1;
-		if (options.pageNumber != undefined) {
-			pageNo = (1 + ((options.pageNumber - 1) * options.pageSize));
-			console.log('Currently showing page start ' + pageNo + ' of '
-					+ options.pageNumber + ' page.');
-		}
-		params['pageNo'] = pageNo;
-		params['pageSize'] = options.pageSize;
-
-		console.log('params->' + JSON.stringify(params));
-		return params;
+	
+	function binddingViewData( content ){
+		
+		// title
+		var titleArea = $('<h1/>', {
+			class : 'page-header',
+			text: content.title + ' | '
+		} );
+		titleArea.append( $( '<small/>', { text : 'test' } ) );
+		
+		// byline
+		var divByLine = $( '<div/>', { //class: byline, 
+			text: 'By ' } );
+		var spanAuthor = $( '<span/>', { //class : author 
+			} );
+		spanAuthor.append( $( '<a/>', {
+			//class : 'author-name',
+			href : '#',
+			text : content.userID + ' '
+		} ) );
+		
+		// by line
+		divByLine.append( spanAuthor );
+		var createdOn = '';
+		if( content.createdOn ){
+			var date = new Date(content.createdOn);
+			createdOn = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+		} 
+		
+		divByLine.append( $('<time/>', { 
+			itemprop: 'datePublished',
+			datetime:  createdOn,
+			text : createdOn
+			} ) );
+		
+		divByLine.append( $('<time/>', { 
+			itemprop: 'dateModified',
+			datetime: content.updatedOn,
+			text : content.updatedOn
+			} ) );
+		
+		$divHeader.empty();
+		$divHeader.append( titleArea );
+		$divHeader.append( divByLine );
 	}
 
-	function responseHandler(res) {
-		console.log(res);
-		/* if (res.Result != '0') {
-		    alert(res.Message);
-		}
-		return res.Data; */
-		return res;
-	}
-
-	function randomData() {
-		var startId = ~~(Math.random() * 100), rows = [];
-		for (var i = 0; i < 10; i++) {
-			rows.push({
-				boardID : startId + i,
-				title : 'test' + (startId + i),
-				userID : 'id' + (startId + i)
-			});
-		}
-		return rows;
-	}
 </script>
 <!-- END Script -->
 

@@ -1,5 +1,8 @@
 package com.project.board.domain;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class BoardVO extends BaseVO {
 
 	public int boardID;
@@ -88,7 +91,7 @@ public class BoardVO extends BaseVO {
 		if( id >0 ){
 			boardID = id;
 		}
-		
+		super.createdOn = Calendar.getInstance().getTime();
 		userID = (int) (Math.random() * 100);
 		title = "title" + userID;
 		content = "this is test content...";
